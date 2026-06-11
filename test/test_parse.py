@@ -1,4 +1,5 @@
 from ntsb_intel.ingest.parse import clean_narrative
+from ntsb_intel.ingest.parse import parse_record
 
 def test_clean_narative_removes_html_entities():
     raw = "damage&#x0D;&#x0D;The pilot"
@@ -14,3 +15,14 @@ def test_already_clean_text_unchanged():
 
 def test_collapses_whitespace():
     assert clean_narrative("The  pilot   landed") == "The pilot landed"
+
+def test_parse_record_extracts_flat_fields():
+    record = {
+        "cm_ntsbNum": "TEST123",
+        "cm_city": "Duncan",
+        "cm_state": "OK",
+        "cm_Latitude": 34.47,
+        "prelimNarrative": "The pilot landed&#x0D;\nsafely",
+    }
+    result = parse_record(record)
+    assert result["ntsb_num"] == "TEST123"
