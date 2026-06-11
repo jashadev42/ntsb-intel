@@ -20,3 +20,15 @@ def parse_record(record):
         "factual_narrative": clean_narrative(record.get("factualNarrative")),
         "analysis_narrative": clean_narrative(record.get("analysisNarrative")),
     }
+
+def extract_primary_cause(record):
+    events = []
+    for vehicle in record.get("cm_vehicles", []):
+        events.extend(vehicle.get("cm_events", []))
+
+    if not events:
+        return None
+    
+    for event in events:
+        if event.get("cm_isDefiningEvent"):
+            return event.get("cicttEventSOEGroup")
