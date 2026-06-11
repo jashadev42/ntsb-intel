@@ -32,3 +32,10 @@ def extract_primary_cause(record):
     for event in events:
         if event.get("cm_isDefiningEvent"):
             return event.get("cicttEventSOEGroup")
+        
+def has_narrative(record):
+    factual = clean_narrative(record.get("factualNarrative"))
+    analysis = clean_narrative(record.get("analysisNarrative"))
+    if factual or analysis:
+        return 1
+    return 0

@@ -1,6 +1,7 @@
 from ntsb_intel.ingest.parse import clean_narrative
 from ntsb_intel.ingest.parse import parse_record
 from ntsb_intel.ingest.parse import extract_primary_cause
+from ntsb_intel.ingest.parse import has_narrative
 
 def test_clean_narative_removes_html_entities():
     raw = "damage&#x0D;&#x0D;The pilot"
@@ -12,7 +13,6 @@ def test_null_returns_empty_string():
 
 def test_already_clean_text_unchanged():
     assert clean_narrative("The pilot landed safely") == "The pilot landed safely"
-
 
 def test_collapses_whitespace():
     assert clean_narrative("The  pilot   landed") == "The pilot landed"
@@ -40,3 +40,11 @@ def test_primary_cause_uses_defining_event():
         ]
     }
     assert extract_primary_cause(record) == "Engine Failure"
+
+def test_has_narrative():
+    records = {
+            "analysisNarrative": "Test",
+            "factualNarrative": None,
+    }
+    
+    assert has_narrative(records) == 1
