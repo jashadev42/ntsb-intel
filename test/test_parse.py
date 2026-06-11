@@ -20,13 +20,16 @@ def test_collapses_whitespace():
 def test_parse_record_extracts_flat_fields():
     record = {
         "cm_ntsbNum": "TEST123",
-        "cm_city": "Duncan",
-        "cm_state": "OK",
-        "cm_Latitude": 34.47,
-        "prelimNarrative": "The pilot landed&#x0D;\nsafely",
+        "factualNarrative": "The engine failed",
+        "cm_vehicles": [
+            {"cm_events": [
+                {"cicttEventSOEGroup": "Engine Failure", "cm_isDefiningEvent": True, "cm_sequenceNum": 1}
+            ]}
+        ],
     }
     result = parse_record(record)
-    assert result["ntsb_num"] == "TEST123"
+    assert result["primary_cause"] == "Engine Failure"
+    assert result["has_narrative"] == 1
 
 def test_primary_cause_uses_defining_event():
     record = {

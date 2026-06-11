@@ -1,4 +1,5 @@
 import html
+import json
 
 def clean_narrative(text):
     if text is None:
@@ -19,6 +20,9 @@ def parse_record(record):
         "prelim_narrative": clean_narrative(record.get("prelimNarrative")),
         "factual_narrative": clean_narrative(record.get("factualNarrative")),
         "analysis_narrative": clean_narrative(record.get("analysisNarrative")),
+        "primary_cause": extract_primary_cause(record),
+        "has_narrative": has_narrative(record),
+        "raw_vehicles": json.dumps(record.get("cm_vehicles", []))
     }
 
 def extract_primary_cause(record):
