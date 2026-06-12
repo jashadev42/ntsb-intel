@@ -2,6 +2,7 @@ from ntsb_intel.ingest.parse import clean_narrative
 from ntsb_intel.ingest.parse import parse_record
 from ntsb_intel.ingest.parse import extract_primary_cause
 from ntsb_intel.ingest.parse import has_narrative
+from ntsb_intel.processing.dataset import load_training_data
 
 def test_clean_narative_removes_html_entities():
     raw = "damage&#x0D;&#x0D;The pilot"
@@ -51,3 +52,8 @@ def test_has_narrative():
     }
     
     assert has_narrative(records) == 1
+
+def test_load_training_data_returns_parallel_lists():
+    texts, labels = load_training_data()
+    assert len(texts) == len(labels)
+    assert len(texts) > 0
